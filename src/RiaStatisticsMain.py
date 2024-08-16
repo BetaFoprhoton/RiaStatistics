@@ -67,10 +67,16 @@ def info_st(results_list = get_results_list()) -> dict:
             result[3]
         except:
             continue
+        sub = re.findall(r'(<sub>(.*?)</sub>)', result[3])
+
+        if sub != []:
+            sub = ''.join(sub[0][0])
+            name = result[3].replace(sub, "")
+        else: name = result[3]
         try:
-            results_dict[result[3]] += 1
+            results_dict[name] += 1
         except:
-            results_dict[result[3]] = 1
+            results_dict[name] = 1
     return dict(sorted(results_dict.items(), key=lambda item: item[1], reverse=True))
 
 def op_st() -> dict:
@@ -91,12 +97,32 @@ def op_st() -> dict:
 
     return dict(sorted(op_dict.items(), key=lambda item: item[1], reverse=True))
 
+def sub_st(results_list = get_results_list()) -> dict:
+    results_dict = {}
+    for result in results_list:
+        try:
+            result[3]
+        except:
+            continue
+        sub = re.findall(r'(<sub>(.*?)</sub>)', result[3])
+
+        if sub != []:
+            sub = ''.join(sub[0][1])
+        else:
+            continue
+        try:
+            results_dict[sub] += 1
+        except:
+            results_dict[sub] = 1
+    return dict(sorted(results_dict.items(), key=lambda item: item[1], reverse=True))
+
+
 def show_pie(results_dict: dict, title = "统计"):
     plt.pie(x=results_dict.values(),  # 绘图数据
             labels=results_dict.keys(),  #标签
             autopct='%.2f%%',  # 设置百分比的格式，保留两位小数
             pctdistance=0.8,  # 设置百分比标签与圆心的距离
-            labeldistance=1.1,  # 设置标签与圆心的距离
+            labeldistance=1.2,  # 设置标签与圆心的距离
             startangle=120,  # 设置饼图的初始角度
             radius=1.2,  # 设置饼图的半径
             counterclock=False,  # 是否逆时针，这里设置为顺时针方向
@@ -113,7 +139,7 @@ def show_pie(results_dict: dict, title = "统计"):
 show_pie(op_st(), "Ria检票员活跃数统计")
 show_pie(test_st(), "Ria测试数统计")
 show_pie(info_st(), "Ria备注信息统计")
-
+show_pie(sub_st(), "Ria未通过者小标题原因统计")
 
 
 '''
