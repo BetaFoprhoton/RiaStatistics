@@ -131,6 +131,20 @@ def sub_st(results_list=None) -> dict:
             results_dict[sub] = 1
     return dict(sorted(results_dict.items(), key=lambda item: item[1], reverse=True))
 
+'''
+      查找
+mode:   1.查找卷号/日期
+        2.查找ID/车次
+'''
+def find(url: str, mode: int, info: str):
+    results_dict = get_results_list(url)
+    for result in results_dict:
+        try:
+            result[mode - 1]
+        except:
+            continue
+        if result[mode - 1] == info:
+            print(result)
 
 def show_pie(results_dict: dict, title = "统计"):
     plt.pie(x=results_dict.values(),  # 绘图数据
@@ -150,6 +164,8 @@ def show_pie(results_dict: dict, title = "统计"):
     # 显示图形
     plt.show()
 
+find(baseurl, 2, "dsds")
+find(beforeUrl, 2, "dsds")
 
 show_pie(op_st(), "Ria检票员活跃数统计")
 results_List = get_results_list(baseurl)
